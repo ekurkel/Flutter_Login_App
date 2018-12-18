@@ -6,15 +6,12 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: new Scaffold(
-          appBar: new AppBar(title: new Text('Login')),
-          body: new Center(
-              child: new ListView(children: <Widget>[
-              new LoginScreen(),
-            ])
-          )),
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(title: Text('Login')),
+          body: LoginScreen(),
+        )
     );
   }
 }
