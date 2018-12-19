@@ -12,23 +12,24 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return Scaffold(
         appBar: AppBar(title: Text('Login')),
-       body: Container(
-        padding: const EdgeInsets.all(30.0),
-        child: Center(
+        body: Center(
             child: ListView(children: <Widget>[
           Form(
               child: Column(children: <Widget>[
+                SizedBox(height: 20.0),
             ImageWidget(),
-            TextField(
-              decoration: InputDecoration(labelText: 'E-mail'),
-            ),
-            SizedBox(height: 20.0),
-            PasswordField(),
-            SizedBox(height: 30.0),
+            Container(
+                padding: const EdgeInsets.only(right: 35.0, left: 35),
+                child: Column(children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(labelText: 'E-mail'),
+                  ),
+                  SizedBox(height: 20.0),
+                  PasswordField(),
+                  SizedBox(height: 30.0),
+                ])),
             Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -50,6 +51,7 @@ class LoginScreenState extends State<LoginScreen> {
                       },
                       color: Colors.blue),
                 ]),
+            SizedBox(height: 50.0),
             Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +63,7 @@ class LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(color: Colors.blue)))
                 ])
           ]))
-        ])))));
+        ])));
   }
 }
 

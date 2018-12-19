@@ -11,9 +11,7 @@ class HomeScreenState extends State<HomeScreen> {
   int _count = 30;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(title: Text('Home Screen'), actions: <Widget>[
               IconButton(
                   onPressed: logOut,
@@ -37,7 +35,7 @@ class HomeScreenState extends State<HomeScreen> {
                     ),
                     title: const Text('Title'),
                   );
-                })));
+                }));
   }
 
   void share() {}
