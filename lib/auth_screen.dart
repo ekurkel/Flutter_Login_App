@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/login_screen.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:flutter_login/home_screen.dart';
+import 'package:flutter_login/login_screen.dart';
 
-class Screen extends StatefulWidget {
+class AuthScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => ScreenState();
+  State<StatefulWidget> createState() => AuthScreenState();
 }
 
 enum AuthorizationStatus {
@@ -14,7 +13,7 @@ enum AuthorizationStatus {
   notDetermined
 }
 
-class ScreenState extends State<Screen> {
+class AuthScreenState extends State<AuthScreen> {
   AuthorizationStatus _authStatus = AuthorizationStatus.notSignedIn;
 
   void _signedIn() {
@@ -43,21 +42,22 @@ class ScreenState extends State<Screen> {
       case AuthorizationStatus.notSignedIn:
         return LoginScreen(onSignedIn: _signedIn, onWaiting: _waiting);
       case AuthorizationStatus.notDetermined:
-        return JumpingDots();
+        return ProgressIndicator();
     }
   }
 }
 
-class JumpingDots extends StatelessWidget {
+class ProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-            appBar: AppBar(title: Text('Home screen')),
+            appBar: AppBar(title: Text('Home'), backgroundColor: Colors.blue,),
             body: Center(
-              child: JumpingDotsProgressIndicator(
-                  fontSize: 50.0, color: Colors.blue, milliseconds: 250),
-            )));
+                child: CircularProgressIndicator(backgroundColor: Colors.white, strokeWidth: 4, valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),)
+            )
+        )
+    );
   }
 }

@@ -13,57 +13,57 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Login')),
+        appBar: AppBar(title: Text('Login'), backgroundColor: Colors.blue,),
         body: Center(
             child: ListView(children: <Widget>[
-          Form(
-              child: Column(children: <Widget>[
-                SizedBox(height: 20.0),
-            ImageWidget(),
-            Container(
-                padding: const EdgeInsets.only(right: 35.0, left: 35),
-                child: Column(children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(labelText: 'E-mail'),
-                  ),
-                  SizedBox(height: 20.0),
-                  PasswordField(),
-                  SizedBox(height: 30.0),
-                ])),
-            Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  FlatButton(
-                      onPressed: null,
-                      child: Text('Forgot password',
-                          style: TextStyle(color: Colors.blue))),
-                  RaisedButton(
-                      child: Text(
-                        'Login',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        widget.onWaiting();
-                        await new Future.delayed(const Duration(seconds: 3));
-                        widget.onSignedIn();
-                        //_openNewPage();
-                      },
-                      color: Colors.blue),
-                ]),
-            SizedBox(height: 50.0),
-            Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Still do not have an account '),
-                  FlatButton(
-                      onPressed: null,
-                      child: Text('registration',
-                          style: TextStyle(color: Colors.blue)))
-                ])
-          ]))
-        ])));
+              Form(
+                  child: Column(children: <Widget>[
+                    SizedBox(height: 20.0),
+                    ImageWidget(),
+                    Container(
+                        padding: const EdgeInsets.only(right: 35.0, left: 35),
+                        child: Column(children: <Widget>[
+                          TextField(
+                            decoration: InputDecoration(labelText: 'E-mail'),
+                          ),
+                          SizedBox(height: 20.0),
+                          PasswordField(),
+                          SizedBox(height: 30.0),
+                        ])),
+                    Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          FlatButton(
+                              onPressed: null,
+                              child: Text('Forgot password',
+                                  style: TextStyle(color: Colors.blue))),
+                          RaisedButton(
+                              child: Text(
+                                'Login',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () async {
+                                widget.onWaiting();
+                                await new Future.delayed(const Duration(seconds: 3));
+                                widget.onSignedIn();
+                                //_openNewPage();
+                              },
+                              color: Colors.blue),
+                        ]),
+                    SizedBox(height: 60.0),
+                    Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Still do not have an account '),
+                          FlatButton(
+                              onPressed: null,
+                              child: Text('registration',
+                                  style: TextStyle(color: Colors.blue)))
+                        ])
+                  ]))
+            ])));
   }
 }
 
@@ -82,8 +82,7 @@ class PasswordFieldState extends State {
           labelText: 'Password',
           suffixIcon: IconButton(
             onPressed: _toggle,
-            icon:
-                _obscurePassword ? Icon(Icons.lock_outline) : Icon(Icons.lock),
+            icon: Icon(Icons.remove_red_eye),
             color: _obscurePassword ? Colors.grey : Colors.blue,
           )),
       obscureText: _obscurePassword,
