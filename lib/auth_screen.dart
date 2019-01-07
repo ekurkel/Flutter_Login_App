@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/home_screen.dart';
+import 'package:flutter_login/my_progress_indicator.dart';
 import 'package:flutter_login/login_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -7,57 +8,43 @@ class AuthScreen extends StatefulWidget {
   State<StatefulWidget> createState() => AuthScreenState();
 }
 
-enum AuthorizationStatus {
-  notSignedIn,
-  signedIn,
-  notDetermined
-}
+enum AuthorizationStatus { NOT_SIGNED_IN, SIGNED_IN, NOT_DETERMINED }
 
 class AuthScreenState extends State<AuthScreen> {
-  AuthorizationStatus _authStatus = AuthorizationStatus.notSignedIn;
+  AuthorizationStatus _authStatus = AuthorizationStatus.NOT_SIGNED_IN;
 
   void _signedIn() {
     setState(() {
-      _authStatus = AuthorizationStatus.signedIn;
+      _authStatus = AuthorizationStatus.SIGNED_IN;
     });
   }
 
   void _signedOut() {
     setState(() {
-      _authStatus = AuthorizationStatus.notSignedIn;
+      _authStatus = AuthorizationStatus.NOT_SIGNED_IN;
     });
   }
 
   void _waiting() {
     setState(() {
-      _authStatus = AuthorizationStatus.notDetermined;
+      _authStatus = AuthorizationStatus.NOT_DETERMINED;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     switch (_authStatus) {
-      case AuthorizationStatus.signedIn:
+      case AuthorizationStatus.SIGNED_IN:
         return HomeScreen(onSignedOut: _signedOut);
-      case AuthorizationStatus.notSignedIn:
+      case AuthorizationStatus.NOT_SIGNED_IN:
         return LoginScreen(onSignedIn: _signedIn, onWaiting: _waiting);
-      case AuthorizationStatus.notDetermined:
-        return ProgressIndicator();
+      case AuthorizationStatus.NOT_DETERMINED:
+        return Scaffold(
+                appBar: AppBar(
+                  title: Text('Login'),
+                  backgroundColor: Colors.blue,
+                ),
+                body: MyProgressIndicator());
     }
-  }
-}
-
-class ProgressIndicator extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            appBar: AppBar(title: Text('Home'), backgroundColor: Colors.blue,),
-            body: Center(
-                child: CircularProgressIndicator(backgroundColor: Colors.white, strokeWidth: 4, valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),)
-            )
-        )
-    );
   }
 }

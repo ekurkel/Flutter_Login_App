@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/my_progress_indicator.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -31,7 +32,7 @@ class HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             return snapshot.data[index];
                           })
-                      : ProgressIndicator();
+                      : MyProgressIndicator();
                 })));
   }
 
@@ -67,15 +68,3 @@ class HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ProgressIndicator extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Colors.white,
-          strokeWidth: 4,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-        )
-    );
-  }
-}
