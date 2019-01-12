@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/my_progress_indicator.dart';
 import 'dart:async';
+import 'package:flutter_login/account_screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -17,10 +18,13 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: AppBar(title: Text('Home'), actions: <Widget>[
           IconButton(
+              onPressed: share, icon: Icon(Icons.share, color: Colors.white)),
+          IconButton(
               onPressed: logOut,
               icon: Icon(Icons.exit_to_app, color: Colors.white)),
           IconButton(
-              onPressed: share, icon: Icon(Icons.share, color: Colors.white)),
+              onPressed: account,
+              icon: Icon(Icons.account_circle, color: Colors.white)),
         ]),
         body: Container(
             child: FutureBuilder(
@@ -62,6 +66,12 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void share() {}
+
+  void account() {
+    Navigator.push(context,
+      MaterialPageRoute(builder: (context) => AccoutScreen()),
+    );
+  }
 
   void logOut() {
     widget.onSignedOut();
