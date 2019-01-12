@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/my_progress_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 
 class AccoutScreen extends StatefulWidget {
@@ -9,8 +10,10 @@ class AccoutScreen extends StatefulWidget {
   State<StatefulWidget> createState() => AccountScreenState();
 }
 
+var picture = Image(
+    image: AssetImage("assets/male-avatar.jpg"), width: 200.0, height: 200.0);
+
 class AccountScreenState extends State<AccoutScreen> {
-  var _picture = AssetImage('assets/male-avatar.jpg');
   String selected;
 
   @override
@@ -22,7 +25,7 @@ class AccountScreenState extends State<AccoutScreen> {
               child: ListView(children: <Widget>[
             Column(children: <Widget>[
               SizedBox(height: 20.0),
-              ImageWidget(_picture),
+              ImageWidget(),
               Container(
                 padding: const EdgeInsets.only(right: 35.0, left: 35),
                 child: Column(children: <Widget>[
@@ -52,6 +55,7 @@ class AccountScreenState extends State<AccoutScreen> {
                                 child: MyProgressIndicator());
                       }),
                   RaisedButton(
+                      color: Colors.blue,
                       child: Text(
                         'Save',
                         style: TextStyle(color: Colors.white),
@@ -82,19 +86,59 @@ class AccountScreenState extends State<AccoutScreen> {
   }
 }
 
-class ImageWidget extends StatelessWidget {
-  final AssetImage _img;
-  ImageWidget(this._img);
+class ImageWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => ImageWidgetState();
+}
 
+class ImageWidgetState extends State<ImageWidget> {
   @override
   Widget build(BuildContext context) {
-    var image = Image(
-      image: _img,
-      width: 200.0,
-      height: 200.0,
-    );
     return Container(
-      child: image,
-    );
+        child: IconButton(
+            icon: picture,
+            iconSize: 200,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  // return object of type Dialog
+                  return AlertDialog(
+                    title: new Text("Image source"),
+                    content: new Text("Select an image source"),
+                    actions: <Widget>[
+                      // usually buttons at the bottom of the dialog
+                      new FlatButton(
+                        child: new Text("Cancel"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      new FlatButton(
+                          child: new Text("Camera"),
+                          onPressed: () async {
+                            Navigator.of(context).pop();
+                            var img = Image.file(await ImagePicker.pickImage(
+                                source: ImageSource.camera));
+                            setState(() {
+                              if (img != null) picture = img;
+                            });
+                          }),
+                      new FlatButton(
+                        child: new Text("Gallery"),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          var img = Image.file(await ImagePicker.pickImage(
+                              source: ImageSource.gallery));
+                          setState(() {
+                            if (img != null) picture = img;
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            }));
   }
 }
