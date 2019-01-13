@@ -68,8 +68,8 @@ class AccountScreenState extends State<AccoutScreen> {
   }
 
   Future<List<DropdownMenuItem<String>>> listDrop() async {
-    var data = await http.get("https://api.myjson.com/bins/fa520");
-    var jsonData = json.decode(data.body);
+    var data = await DefaultAssetBundle.of(context).loadString("assets/countries.json");
+    var jsonData = json.decode(data);
 
     List<DropdownMenuItem<String>> listDrops = [];
     for (var d in jsonData) {

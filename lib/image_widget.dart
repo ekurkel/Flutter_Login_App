@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-var picture = Image(
-    image: AssetImage("assets/male-avatar.jpg"), width: 200.0, height: 200.0);
+String picturePath = "assets/male-avatar.jpg";
 
 class ImageWidget extends StatefulWidget {
   @override
@@ -14,8 +13,8 @@ class ImageWidgetState extends State<ImageWidget> {
   Widget build(BuildContext context) {
     return Container(
         child: IconButton(
-            icon: picture,
             iconSize: 200,
+            icon: CircleAvatar(backgroundImage: AssetImage(picturePath), radius: 100,),
             onPressed: () {
               showDialog(
                 context: context,
@@ -36,20 +35,20 @@ class ImageWidgetState extends State<ImageWidget> {
                           child: new Text("Camera"),
                           onPressed: () async {
                             Navigator.of(context).pop();
-                            var img = Image.file(await ImagePicker.pickImage(
-                                source: ImageSource.camera));
+                            var img = await ImagePicker.pickImage(
+                                source: ImageSource.camera, maxWidth: 200, maxHeight: 200);
                             setState(() {
-                              if (img != null) picture = img;
+                              if (img != null) picturePath = img.path;
                             });
                           }),
                       new FlatButton(
                         child: new Text("Gallery"),
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          var img = Image.file(await ImagePicker.pickImage(
-                              source: ImageSource.gallery));
+                          var img = await ImagePicker.pickImage(
+                              source: ImageSource.gallery,  maxWidth: 200, maxHeight: 200);
                           setState(() {
-                            if (img != null) picture = img;
+                            if (img != null) picturePath = img.path;
                           });
                         },
                       ),
