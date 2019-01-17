@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/my_progress_indicator.dart';
-import 'dart:async';
 import 'package:flutter_login/account_screen.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter_login/list_sports_screen.dart';
+import 'package:flutter_login/list_leagues_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({this.onSignedOut});
@@ -13,62 +11,51 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+  final List<Widget> _children = [ListSports(), Leagues()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Home'), actions: <Widget>[
-          IconButton(
-              onPressed: share, icon: Icon(Icons.share, color: Colors.white)),
-          IconButton(
-              onPressed: logOut,
-              icon: Icon(Icons.exit_to_app, color: Colors.white)),
-          IconButton(
-              onPressed: account,
-              icon: Icon(Icons.account_circle, color: Colors.white)),
-        ]),
-        body: Container(
-            child: FutureBuilder(
-                future: _getListTiles(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return snapshot.hasData
-                      ? ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return snapshot.data[index];
-                          })
-                      : MyProgressIndicator();
-                })));
+      appBar: AppBar(title: Text('Sport'), actions: <Widget>[
+        IconButton(
+            onPressed: share, icon: Icon(Icons.share, color: Colors.white)),
+        IconButton(
+            onPressed: logOut,
+            icon: Icon(Icons.exit_to_app, color: Colors.white)),
+        IconButton(
+            onPressed: account,
+            icon: Icon(Icons.account_circle, color: Colors.white)),
+      ]),
+      body: _children[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.category),
+            title: new Text('Sports'),
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.equalizer),
+            title: new Text('Leagues'),
+          ),
+        ],
+      ),
+    );
   }
 
-  Future<List<ListTile>> _getListTiles() async {
-    var data = await http.get("http://api.myjson.com/bins/8jxuc");
-    var jsonData = json.decode(data.body);
-
-    List<ListTile> listTiles = [];
-
-    for (var d in jsonData) {
-      ListTile lt = ListTile(
-        title: Text(d["title"].toString(),),
-        subtitle: Text(d["subtitle"].toString(),),
-        trailing: const Icon(
-          Icons.local_grocery_store,
-          color: Colors.blue,
-        ),
-        leading: const Icon(
-          Icons.android,
-          color: Colors.green,
-        ),
-      );
-      listTiles.add(lt);
-    }
-
-    return listTiles;
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
   void share() {}
 
   void account() {
-    Navigator.push(context,
+    Navigator.push(
+      context,
       MaterialPageRoute(builder: (context) => AccoutScreen()),
     );
   }
@@ -77,4 +64,3 @@ class HomeScreenState extends State<HomeScreen> {
     widget.onSignedOut();
   }
 }
-

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/home_screen.dart';
-import 'package:flutter_login/my_progress_indicator.dart';
+import 'package:flutter_login/widgets/my_progress_indicator.dart';
 import 'package:flutter_login/login_screen.dart';
 
 class AuthScreen extends StatefulWidget {
