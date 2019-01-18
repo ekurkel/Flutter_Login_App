@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_login/model/team.dart';
-import 'package:flutter_youtube/flutter_youtube.dart';
 
 class TeamInfo extends StatelessWidget {
   final Team _team;
@@ -68,7 +67,7 @@ class TeamInfo extends StatelessWidget {
                                               style: TextStyle(fontSize: 16)))
                                     ])
                                   : SizedBox(height: 0),
-                              _team.facebook.length != 0
+                              _team.youtube.length != 0
                                   ? Row(children: <Widget>[
                                       Image.network(
                                           "https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube_v2-512.png",

@@ -67,39 +67,41 @@ class LeagueInfoState extends State<LeagueInfo> {
                   return TeamInfo(team);
                 }));
               },
-              child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                        right:
-                            BorderSide(color: Colors.lightBlueAccent, width: 5),
-                        top:
-                            BorderSide(color: Colors.lightBlueAccent, width: 5),
-                        left: BorderSide(color: Colors.indigoAccent, width: 5),
-                        bottom:
-                            BorderSide(color: Colors.indigoAccent, width: 5),
-                      ),
-                      color: Colors.blue),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(d["strTeam"].toString(),
-                          style: TextStyle(
-                              fontSize: 35,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic),
-                          textAlign: TextAlign.center),
-                      SizedBox(height: 50),
-                      Hero(
-                        tag: 'imageTeamHero${d["strTeam"]}',
-                        child: Image.network(
-                          d["strTeamBadge"],
-                          width: 230,
-                        ),
-
-                      )
-                    ],
-                  )))));
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(40),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                            right: BorderSide(
+                                color: Colors.lightBlueAccent, width: 5),
+                            top: BorderSide(
+                                color: Colors.lightBlueAccent, width: 5),
+                            left: BorderSide(
+                                color: Colors.indigoAccent, width: 5),
+                            bottom: BorderSide(
+                                color: Colors.indigoAccent, width: 5),
+                          ),
+                          color: Colors.blue),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(d["strTeam"].toString(),
+                              style: TextStyle(
+                                  fontSize: 35,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic),
+                              textAlign: TextAlign.center),
+                          SizedBox(height: 50),
+                          Hero(
+                            tag: 'imageTeamHero${d["strTeam"]}',
+                            child: Image.network(
+                              d["strTeamBadge"],
+                              width: 230,
+                            ),
+                          )
+                        ],
+                      ))))));
 
     return listTeamPages;
   }
