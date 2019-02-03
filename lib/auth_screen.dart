@@ -10,11 +10,11 @@ class AuthScreen extends StatefulWidget {
   State<StatefulWidget> createState() => AuthScreenState();
 }
 
-enum AuthorizationStatus { NOT_SIGNED_IN, SIGNED_IN }
+enum AuthorizationStatus { NOT_SIGNED_IN, SIGNED_IN, WAITING }
 
 class AuthScreenState extends State<AuthScreen> {
   FirebaseUser _user;
-  AuthorizationStatus _authStatus = AuthorizationStatus.NOT_SIGNED_IN;
+  AuthorizationStatus _authStatus = AuthorizationStatus.WAITING;
 
   AuthScreenState() {
     _signedIn();
@@ -27,13 +27,13 @@ class AuthScreenState extends State<AuthScreen> {
     if (login != null && password != null) {
       _user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: login, password: password);
-    setState(() {
-      _authStatus = AuthorizationStatus.SIGNED_IN;
-    });
+      setState(() {
+        _authStatus = AuthorizationStatus.SIGNED_IN;
+      });
     }
   }
 
-  void _onGoogleSignedIn(FirebaseUser user){
+  void _onGoogleSignedIn(FirebaseUser user) {
     _user = user;
     setState(() {
       _authStatus = AuthorizationStatus.SIGNED_IN;
@@ -51,14 +51,26 @@ class AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (_authStatus == AuthorizationStatus.WAITING)
+      _authStatus = AuthorizationStatus.NOT_SIGNED_IN;
+
     switch (_authStatus) {
       case AuthorizationStatus.SIGNED_IN:
-        return HomeScreen(onSignedOut: _signedOut, user: _user,);
+        return HomeScreen(
+          onSignedOut: _signedOut,
+          user: _user,
+        );
       case AuthorizationStatus.NOT_SIGNED_IN:
         return LoginScreen(
           onSignedIn: _signedIn,
           onGoogleSignedIn: _onGoogleSignedIn,
           signOut: _signedOut,
+        );
+      case AuthorizationStatus.WAITING:
+        return Scaffold(
+          appBar: AppBar(title: Text("Login")),
+          body: Center(child: MyProgressIndicator()),
         );
     }
   }
