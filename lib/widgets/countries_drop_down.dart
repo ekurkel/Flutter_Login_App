@@ -12,7 +12,6 @@ class CoutriesDropDown {
     listDrops.add(DropdownMenuItem(
         child: Text("All countries"),
         value: null ));
-
     for (var d in jsonData) {
       listDrops.add(DropdownMenuItem(
         child: Row(children: <Widget>[

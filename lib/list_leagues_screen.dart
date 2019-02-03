@@ -20,45 +20,50 @@ class LeaguesState extends State<Leagues> {
     return Container(
       child: Center(
         child: Column(children: <Widget>[
-          Row(children: <Widget>[
-            SizedBox(width: 10),
-            FutureBuilder(
-                future: CoutriesDropDown.listDrop(context),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return snapshot.hasData
-                      ? DropdownButton(
-                          value: _country,
-                          hint: Text("Select country"),
-                          items: snapshot.data,
-                          onChanged: (value) {
-                            _country = value;
-                            setState(() {});
-                          },
-                        )
-                      : Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          child: MyProgressIndicator());
-                }),
-            SizedBox(width: 10),
-            FutureBuilder(
-                future: _getListSports(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return snapshot.hasData
-                      ? DropdownButton(
-                          value: _sport,
-                          hint: Text("Select sport"),
-                          items: snapshot.data,
-                          onChanged: (value) {
-                            _sport = value;
-                            setState(() {});
-                          },
-                        )
-                      : Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20),
-                          child: //MyProgressIndicator());
-                  Text(" "));
-                }),
-          ]),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(children: <Widget>[
+              Expanded(flex: 5,
+                child: FutureBuilder(
+                    future: CoutriesDropDown.listDrop(context),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return snapshot.hasData
+                          ? DropdownButton(
+                              value: _country,
+                              hint: Text("Select country"),
+                              items: snapshot.data,
+                              onChanged: (value) {
+                                _country = value;
+                                setState(() {});
+                              },
+                            )
+                          : Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: MyProgressIndicator());
+                    }),
+              ),
+              Expanded( flex: 8,
+                child: FutureBuilder(
+                    future: _getListSports(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return snapshot.hasData
+                          ? DropdownButton(
+                                value: _sport,
+                                hint: Text("Select sport"),
+                                items: snapshot.data,
+                                onChanged: (value) {
+                                  _sport = value;
+                                  setState(() {});
+                                },
+                              )
+                          : Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: //MyProgressIndicator());
+                                  Text(" "));
+                    }),
+              ),
+            ]),
+          ),
           Flexible(
               child: FutureBuilder(
                   future: _getListLeagues(),
@@ -94,7 +99,7 @@ class LeaguesState extends State<Leagues> {
             width: 70,
           ),
           SizedBox(width: 10),
-          Text(d["strSport"].toString()),
+          Text(d["strSport"].toString(), softWrap: true,),
         ]),
         value: d["strSport"],
       ));
@@ -127,10 +132,12 @@ class LeaguesState extends State<Leagues> {
       if (((_sport != null) & (_sport == d["strSport"])) | (_sport == null)) {
         ListTile lt = ListTile(
           onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LeagueInfo(d["idLeague"], d["strLeague"])));},
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        LeagueInfo(d["idLeague"], d["strLeague"])));
+          },
           title: Text(d["strLeague"]),
           subtitle: Text(d["strSport"]),
           trailing: const Icon(

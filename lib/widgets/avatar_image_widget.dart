@@ -21,18 +21,18 @@ class ImageWidgetState extends State<ImageWidget> {
                 builder: (BuildContext context) {
                   // return object of type Dialog
                   return AlertDialog(
-                    title: new Text("Image source"),
-                    content: new Text("Select an image source"),
+                    title: Text("Image source"),
+                    content: Text("Select an image source"),
                     actions: <Widget>[
                       // usually buttons at the bottom of the dialog
                       new FlatButton(
-                        child: new Text("Cancel"),
+                        child: Text("Cancel"),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
                       new FlatButton(
-                          child: new Text("Camera"),
+                          child: Text("Camera"),
                           onPressed: () async {
                             Navigator.of(context).pop();
                             var img = await ImagePicker.pickImage(
@@ -42,7 +42,7 @@ class ImageWidgetState extends State<ImageWidget> {
                             });
                           }),
                       new FlatButton(
-                        child: new Text("Gallery"),
+                        child: Text("Gallery"),
                         onPressed: () async {
                           Navigator.of(context).pop();
                           var img = await ImagePicker.pickImage(

@@ -1,69 +1,152 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({this.onSignedIn, this.onWaiting});
   final VoidCallback onWaiting;
-  final VoidCallback onSignedIn;
+  final Function onSignedIn;
+  final Function(FirebaseUser) onGoogleSignedIn;
+  final VoidCallback signOut;
+
+  LoginScreen({this.onSignedIn, this.onGoogleSignedIn, this.onWaiting, this.signOut});
+
   @override
   State<StatefulWidget> createState() => LoginScreenState();
 }
 
+String _email, _password;
+
 class LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Login'), backgroundColor: Colors.blue,),
+        appBar: AppBar(
+          title: Text('Login'),
+          backgroundColor: Colors.blue,
+        ),
         body: Center(
             child: ListView(children: <Widget>[
-              Form(
-                  child: Column(children: <Widget>[
-                    SizedBox(height: 20.0),
-                    ImageWidget(),
-                    Container(
-                        padding: const EdgeInsets.only(right: 35.0, left: 35),
-                        child: Column(children: <Widget>[
-                          TextField(
-                            decoration: InputDecoration(labelText: 'E-mail'),
-                          ),
-                          SizedBox(height: 20.0),
-                          PasswordField(),
-                          SizedBox(height: 30.0),
-                        ])),
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          FlatButton(
-                              onPressed: null,
-                              child: Text('Forgot password',
-                                  style: TextStyle(color: Colors.blue))),
-                          RaisedButton(
-                              child: Text(
-                                'Login',
-                                style: TextStyle(color: Colors.white),
-                              ),
+          Column(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ImageWidget(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: Form(
+                key: _formKey,
+                child: Column(children: <Widget>[
+                  TextFormField(
+                      validator: (input) {
+                        if (input.isEmpty) {
+                          return 'Provide an email';
+                        }
+                      },
+                      onSaved: (input) => _email = input,
+                      decoration: InputDecoration(labelText: 'Email')),
+                  SizedBox(height: 20.0),
+                  PasswordField(),
+                  SizedBox(height: 30.0),
+                ]),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                        flex: 5,
+                        child: Row(children: <Widget>[
+                          IconButton(
+                              icon: Image.asset('assets/google.png'),
                               onPressed: () async {
-                                widget.onWaiting();
-                                await new Future.delayed(const Duration(seconds: 3));
-                                widget.onSignedIn();
-                                //_openNewPage();
-                              },
-                              color: Colors.blue),
-                        ]),
-                    SizedBox(height: 60.0),
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text('Still do not have an account '),
-                          FlatButton(
-                              onPressed: null,
-                              child: Text('registration',
-                                  style: TextStyle(color: Colors.blue)))
-                        ])
-                  ]))
-            ])));
+                                GoogleSignInAccount gSAccount =
+                                    await GoogleSignIn().signIn();
+                                GoogleSignInAuthentication gSAuthentication =
+                                    await gSAccount.authentication;
+                                try {
+                                  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+                                  FirebaseUser user = await firebaseAuth.signInWithGoogle(idToken: gSAuthentication.idToken, accessToken: gSAuthentication.accessToken);
+                                  widget.onGoogleSignedIn(user);
+                                } on Exception catch (e) {
+                                  print("Exception: $e");
+                                }
+                              }),
+                          IconButton(
+                              icon: Image.asset('assets/facebook.png'),
+                              onPressed: () {})
+                        ])),
+                    Expanded(
+                      flex: 5,
+                      child: RaisedButton(
+                          child: Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () async {
+                            _formKey.currentState.save();
+                            try {
+                              FirebaseUser user = await _auth();
+                              SharedPreferences pref = await SharedPreferences.getInstance();
+                              pref.setString("Login", _email);
+                              pref.setString("Password", _password);
+                              widget.onSignedIn();
+                            } on Exception catch (e) {
+                              print('firebase exaption: ${e}');
+                              return showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return _wrongPassAlertDialog();
+                                  });
+                            }
+                          },
+                          color: Colors.blue),
+                    ),
+                  ]),
+            ),
+            FlatButton(
+                onPressed: null,
+                child: Text('Forgot password',
+                    style: TextStyle(color: Colors.blue))),
+            Padding(
+              padding: const EdgeInsets.only(top: 60),
+              child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Still do not have an account '),
+                    FlatButton(
+                        onPressed: null,
+                        child: Text('registration',
+                            style: TextStyle(color: Colors.blue)))
+                  ]),
+            )
+          ]),
+        ])));
+  }
+
+  Future<FirebaseUser> _auth() async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser user = await firebaseAuth.signInWithEmailAndPassword(
+        email: _email, password: _password);
+    return user;
+  }
+
+  Widget _wrongPassAlertDialog() {
+    return AlertDialog(
+        content: Text("Wrong login or passord"),
+        actions: <Widget>[
+          FlatButton(
+              child: Text("Ok"),
+              onPressed: () {
+                widget.signOut();
+                Navigator.pop(context);
+              })
+        ]);
   }
 }
 
@@ -77,7 +160,13 @@ class PasswordFieldState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      validator: (input) {
+        if (input.length < 6) {
+          return 'Longer password please';
+        }
+      },
+      onSaved: (input) => _password = input,
       decoration: InputDecoration(
           labelText: 'Password',
           suffixIcon: IconButton(

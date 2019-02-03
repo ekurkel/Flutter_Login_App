@@ -30,8 +30,7 @@ class TeamInfo extends StatelessWidget {
                             children: <Widget>[
                               _team.website.length != 0
                                   ? Row(children: <Widget>[
-                                      Image.network(
-                                          "https://img.icons8.com/metro/1600/domain.png",
+                                      Image.asset("assets/website.png",
                                           width: 30),
                                       FlatButton(
                                           onPressed: () {
@@ -43,8 +42,7 @@ class TeamInfo extends StatelessWidget {
                                   : SizedBox(height: 0),
                               _team.instagtam.length != 0
                                   ? Row(children: <Widget>[
-                                      Image.network(
-                                          "https://instagram-brand.com/wp-content/uploads/2016/11/app-icon2.png",
+                                      Image.asset("assets/instagram.png",
                                           width: 30),
                                       FlatButton(
                                           onPressed: () {
@@ -56,8 +54,7 @@ class TeamInfo extends StatelessWidget {
                                   : SizedBox(height: 0),
                               _team.facebook.length != 0
                                   ? Row(children: <Widget>[
-                                      Image.network(
-                                          "http://www.iconarchive.com/download/i54037/danleech/simple/facebook.ico",
+                                      Image.asset("assets/facebook.png",
                                           width: 30),
                                       FlatButton(
                                           onPressed: () {
@@ -69,8 +66,7 @@ class TeamInfo extends StatelessWidget {
                                   : SizedBox(height: 0),
                               _team.youtube.length != 0
                                   ? Row(children: <Widget>[
-                                      Image.network(
-                                          "https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube_v2-512.png",
+                                      Image.asset("assets/youtube.png",
                                           width: 30),
                                       FlatButton(
                                           onPressed: () {
@@ -93,7 +89,6 @@ class TeamInfo extends StatelessWidget {
                     child: Text(_team.teamDescription,
                         style: TextStyle(fontSize: 16),
                         textAlign: TextAlign.justify)),
-
               ])
             ])));
   }

@@ -21,7 +21,11 @@ dependencies:
   image_cropper: ^0.0.4
   url_launcher: ^4.0.3
   cupertino_icons: ^0.1.2
-
+  firebase_auth: ^0.5.20
+  google_sign_in: ^3.2.2
+  google_maps_flutter: ^0.0.3+3
+  shared_preferences: ^0.4.3
+  flutter_youtube: ^1.1.4
 
 dev_dependencies:
   flutter_test:
@@ -45,8 +49,14 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
       - assets/butterfly.png
+      - assets/instagram.png
+      - assets/facebook.png
+      - assets/website.png
+      - assets/google.png
+      - assets/youtube.png
       - assets/male-avatar.jpg
       - assets/countries.json
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
